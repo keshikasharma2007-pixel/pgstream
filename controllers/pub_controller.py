@@ -21,9 +21,8 @@ def get_pub(pubname):
 # delete specific pub
 @pub_controller.route('/publications/<string:pubname>', methods=['DELETE'])
 def delete_pub(pubname):
-    isThere = service.get_pub(pubname)
-    # name isThere differently - not a bool var, but a pub object or None
-    if not isThere:
+    publication = service.get_pub(pubname)
+    if not publication:
         return jsonify({"error" : "not found"}), 404
     success = service.delete_pub_by_name(pubname)
     if not success:
@@ -35,6 +34,12 @@ def create():
     data = request.get_json(silent=True) or {}
     #instead of data, make publication.py object
     pubname = data.get("pubname")
+
+    publication = service.get_pub(pubname)
+    if publication:
+        return jsonify({"error" : "publication already exists"}), 409
+
+
     table = data.get("table")
 
     if not pubname or not table:
@@ -53,6 +58,10 @@ def create():
 def update_pub_publish(pubname):
     data = request.get_json(silent=True) or {}
     publish_ops = data.get("publish")
+
+    publication = service.get_pub(pubname)
+    if not publication:
+        return jsonify({"error" : f"publication {pubname} does not exist"}), 404
 
     if not publish_ops or not isinstance(publish_ops, list):
         return jsonify({"error" : "publish info required"}), 400
