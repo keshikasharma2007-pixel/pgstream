@@ -25,7 +25,7 @@ def delete_pub(pubname):
         return jsonify({"error" : "not found"}), 404
     success = service.delete_pub_by_name(pubname)
     if not success:
-        return jsonify({"error" : "not deleted"}), 404
+        return jsonify({"error" : "not deleted"}), 500
     return jsonify({"message" : "pub deleted"}), 200
 
 @pub_controller.route('/publications', methods=['POST'])
