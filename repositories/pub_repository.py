@@ -2,16 +2,19 @@ from models.publication import publication
 import psycopg2
 from psycopg2 import sql
 import json
+import logging
 
 # connection - need to put this in config file
 
-with open("config.josn", "r") as f:
+with open("config.json", "r") as f:
     config = json.load(f)
 
-db_config = config["database"]
-
-conn = psycopg2.connect(**config["database"])
-conn.autocommit = False
+def get_db_connection(config: dict):
+    db_config = config["database"]
+    conn = psycopg2.connect(**db_config)
+    conn.autocommit = False
+    return conn
+conn = get_db_connection(config)
 
 
 class PubRepository:
