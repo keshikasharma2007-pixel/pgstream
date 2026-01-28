@@ -1,17 +1,16 @@
-from os.path import exists
-
 from models.publication import publication
 import psycopg2
 from psycopg2 import sql
+import json
 
 # connection - need to put this in config file
-conn = psycopg2.connect(
-    database='publisher',
-    user='postgres',
-    password='postgres',
-    host='127.0.0.1',
-    port='5432'
-)
+
+with open("config.josn", "r") as f:
+    config = json.load(f)
+
+db_config = config["database"]
+
+conn = psycopg2.connect(**config["database"])
 conn.autocommit = False
 
 
