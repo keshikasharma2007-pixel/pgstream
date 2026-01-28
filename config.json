@@ -5,5 +5,9 @@
     "password" : "postgres",
     "host" : "127.0.0.1",
     "port" : 5432
+  },
+  "logging" : {
+    "level" : "DEBUG",
+    "format" : "%(levelname)s : %(message)s"
   }
 }
