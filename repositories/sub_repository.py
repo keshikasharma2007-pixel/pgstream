@@ -1,23 +1,17 @@
 from models.subscriber import subscriber
 import psycopg2
 from psycopg2 import sql
-
-conn = psycopg2.connect(
-    database='subscriber',
-    user='postgres',
-    password='postgres',
-    host='127.0.0.1',
-    port='5432'
-)
-conn.autocommit = False
+import logging
 
 class SubRepository:
-    def __init__(self):
-        self.subs = {}
+    def __init__(self, conn, logger: logging.Logger):
+        self.pubs = {}
+        self.conn = conn
+        self.logger = logger
 
     # methods
     def get_all_subs(self):
-        with conn.cursor() as cur:
+        with self.conn.cursor() as cur:
             cur.execute("""
             SELECT subname, subenabled, subpublications, subconninfo, subslotname
             FROM pg_subscription
