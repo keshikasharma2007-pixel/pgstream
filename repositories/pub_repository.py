@@ -6,6 +6,40 @@ import psycopg2
 from psycopg2 import sql
 import logging
 
+# connection - need to put this in config file
+
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+def get_db_connection(config: dict):
+    db_config = config["database"]
+    conn = psycopg2.connect(**db_config)
+    conn.autocommit = False
+    return conn
+
+
+def setup_logging(config: dict):
+    log_level = config["logging"]["level"].upper()
+
+    try:
+        level = getattr(logging, log_level)
+    except AttributeError:
+        raise ValueError(f"Invalid log level: {log_level}")
+
+    logging.basicConfig(
+        level = level,
+        format = config["logging"]["format"]
+    )
+
+setup_logging(config)
+
+logger = logging.getLogger(__name__)
+logger.debug("debug logging is enabled")
+logger.info("app starting...")
+
+conn = get_db_connection(config)
+
+
 class PubRepository:
     def __init__(self, conn, logger: logging.Logger):
         self.pubs = {}
