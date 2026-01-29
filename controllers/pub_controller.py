@@ -15,7 +15,6 @@ def get_pub(pubname):
     pub = service.get_pub(pubname)
     if not pub:
         return jsonify({"error" : "not found"}), 404
-    #new comment
     return jsonify(pub), 200
 
 # delete specific pub
