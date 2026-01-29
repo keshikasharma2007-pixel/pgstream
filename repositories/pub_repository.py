@@ -47,7 +47,6 @@ class PubRepository:
         self.logger = logger
 
     # methods
-
     def get_all_pubs(self):
         with self.conn.cursor() as cur:
             cur.execute("select * from pg_publication")
