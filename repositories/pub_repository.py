@@ -14,6 +14,27 @@ def get_db_connection(config: dict):
     conn = psycopg2.connect(**db_config)
     conn.autocommit = False
     return conn
+
+
+def setup_logging(config: dict):
+    log_level = config["logging"]["level"].upper()
+
+    try:
+        level = getattr(logging, log_level)
+    except AttributeError:
+        raise ValueError(f"Invalid log level: {log_level}")
+
+    logging.basicConfig(
+        level = level,
+        format = config["logging"]["format"]
+    )
+
+setup_logging(config)
+
+logger = logging.getLogger(__name__)
+logger.debug("debug logging is enabled")
+logger.info("app starting...")
+
 conn = get_db_connection(config)
 
 
