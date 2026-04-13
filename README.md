@@ -23,3 +23,4 @@ It enables developers to track and stream database changes without manually conf
 ---
 
 ## Architecture
+Client → Controller → Service → Repository → PostgreSQL
